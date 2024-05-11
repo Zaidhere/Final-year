@@ -1614,3 +1614,277 @@ Step8: Copy and paste the ip address of load balancer.
 
 
 
+
+
+
+
+
+
+
+Volume:
+=========
+
+azure-->create resource group
+
+virtual machine-->create-->range-->central-->zone 1-->ubuntu-->password-->create
+
+connect to terminal
+
+#sudo su -
+
+#apt-get update
+
+
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+
+#sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+#systemctl start docker
+
+#systemctl enable docker
+
+#systemctl status docker
+
+#cd /var/lib/docker/
+
+#ls
+
+#cd
+
+#docker pull ubuntu:latest
+
+#docker pull httpd
+
+# docker run -it --name web-one ubuntu:latest /bin/bash
+
+#apt-get update
+
+#ctrl+p+q
+
+#docker ps -a
+
+#docker attach web-one
+
+#apt-get install apache2 -y
+
+#cd /var/www/html
+
+#echo "This is my server" > index.html
+
+#ll
+
+#cat index.html
+
+#service apache2 start
+
+#ctrl+p+q
+
+#curl http://paste the apache server ip
+
+---------------------------------------
+
+
+
+azure docker volume:
+=====================
+
+#docker volume create my-volume
+
+#docker volume ls
+
+#docker run -it -v my-volume:/var/www/html --name web-app ubuntu:latest /bin/bash
+
+#apt-get update -y
+
+#apt-get install apache2 -y
+
+#cd /var/www/html/
+
+#cat > index.html
+	hello
+
+#ll
+
+#cat index.html
+
+#service apache2 start
+
+#ctrl+p+q
+
+#curl http://paste the apache server ip
+
+#docker ps -a
+
+#cd /var/lib/docker/volume/my-volume/_data/
+
+#ls
+
+#cat index.html
+
+#pwd
+
+#cd
+
+#docker stop web-app
+
+#docker rm web-app
+
+#docker ps -a
+
+#cd /var/lib/docker/volume/my-volume/_data/
+
+#ll
+
+#docker run -it -v my-volume:/var/www/html --name new-app ubuntu:latest /bin/bash
+
+#apt-get update
+
+#apt-get install apache2 -y
+
+#cd /var/www/html/
+
+#ll
+
+#cat index.html
+
+#service apache2 start
+
+#ctrl+p+q
+
+#mkdir /folder
+
+#docker run -it -v /folder/:/tmp --name new-one ubuntu:latest /bin/bash
+
+#cd /tmp/
+
+#touch training.txt{1..10}
+
+#ctrl+p+q
+
+#cd /var/lib/docker/volumes/
+
+#cd /var
+
+#ll
+
+#cd /my-volume
+
+#ll
+
+
+Git Action s3 bucket:
+======================
+
+
+git actions:
+============
+
+create ec2 instance-->git actions-->linux-->security group----all traffic-->click launch
+
+create s3-->general purpose-->name it-->acls enabled-->uncheck the tickbox-->all enable-->click create
+
+connect to prompt
+
+#sudo su -
+
+#yum install git -y
+
+#ssh-keygen
+
+#cd .ssh/
+
+#ls
+
+#cat id_rsa.pub
+
+copy the key
+
+go to settings-->click ssh and gpg keys-->add new ssh-->name it-->paste the key
+
+#mkdir /folder
+
+#cd /folder/
+
+#vim index.html
+	hi
+
+
+create the repository in git
+
+copy paste all the commands
+
+create iam user-->name it-->click next-->policy---s3full access,administratoraccess-->click create user-->click security credentials-->click create access key
+
+go to that repo that we created-->click settings-->click secret and variable-->click actions-->click new repository secret-->name it-AWS_ACCESS_KEY_ID-->paste the access key-->click add new repo secret-->name it-->AWS_SECRET_ACCESS_KEY-->paste the secret key
+
+
+
+click actions in top-->setup workflow for yourself-->
+
+name: Upload Website
+ 
+on:
+  push:
+    branches:
+    - main
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+ 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+ 
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync .  s3://s3bucket-githubactions --delete   //change the bucket name 
+
+
+
+
+
+go to s3 bucket-->click properties-->go last-->edit in static-->click enable-->name--index.html-->click save changes
+
+click permission-->bucket policy edit-->copy the code and paste in policy
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::s3bucket-githubactions/*"      //change the arn
+        }
+    ]
+}
+
+select the objects-->action-->make it public acl-->click save
+
+copy the static web hosting link and paste in chrome
+
+
+
+
+
+
